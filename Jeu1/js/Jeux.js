@@ -22,7 +22,7 @@ export default class Jeux {
             ArrowLeft: false,
             ArrowRight: false
         };
-        this.vies = 3;
+        this.vies = 5;
         this.score = 0;
         this.niveau = 1; //1
         this.etat = "MENU";
@@ -36,14 +36,14 @@ export default class Jeux {
     init() {
         this.sortieActive = false;
         this.showPieceMessage = false;
-        this.joueur = new Joueur(40,40);
+        this.joueur = new Joueur(30, 30);
         this.obstacles = [];
         this.pieces = [];
         initListeners(this.inputStates);
         let niveauActuel = 1; //1
         this.objetNiveau(niveauActuel);
         this.score = 0;
-        this.vies = 3;
+        this.vies = 5;
         this.niveau = 1; //1
         console.log("Jeu initialisé");
     }
@@ -56,17 +56,18 @@ export default class Jeux {
             this.showPieceMessage = true;
             this.pieceMessageTimer = Date.now();
             this.sortieActive = false;
-            this.obstacles.push(new Obstacle(170,0,40,530,"black"));
-            this.obstacles.push(new Obstacle(400,170,40,600,"black"));
-            this.obstacles.push(new Obstacle(550,500,200,40,"black"));
-            this.obstacles.push(new Obstacle(300, 20, 300, 40, "black"));
-            this.obstacles.push(new Obstacle(500,200,150,40,'black','horizontal',2,420,700));
-            this.obstacles.push(new Obstacle(100,610,300,40,'black'));
-            this.pieces.push(new Piece(200,550,20,20,"yellow"));
-            this.pieces.push(new Piece(150,160,20,20,"yellow"));
-            this.pieces.push(new Piece(670, 20, 20, 20, "yellow"));
-            this.pieces.push(new Piece(670, 480, 20, 20, "yellow"));
-            this.pieces.push(new Piece(300, 670, 20, 20, "yellow"));
+
+            this.obstacles.push(new Obstacle(141, 0,   33, 439, "black"));
+            this.obstacles.push(new Obstacle(331, 141, 33, 497, "black"));
+            this.obstacles.push(new Obstacle(456, 414, 166, 33, "black"));
+            this.obstacles.push(new Obstacle(249, 17,  249, 33, "black"));
+            this.obstacles.push(new Obstacle(414, 166, 124, 33, "black", "horizontal", 2, 348, 580));
+            this.obstacles.push(new Obstacle(83, 505, 249, 33, "black"));
+            this.pieces.push(new Piece(166, 456, 17, 17, "yellow"));
+            this.pieces.push(new Piece(124, 133, 17, 17, "yellow"));
+            this.pieces.push(new Piece(555, 17,  17, 17, "yellow"));
+            this.pieces.push(new Piece(555, 398, 17, 17, "yellow"));
+            this.pieces.push(new Piece(249, 555, 17, 17, "yellow"));
 
             
             this.sortie = new Sortie(580,580,120,120,"white");
@@ -107,7 +108,7 @@ export default class Jeux {
         //this.etat = "JEU EN COURS";
         this.niveau = 1; //1
         this.score = 0;
-        this.vies = 3;
+        this.vies = 5;
         requestAnimationFrame(this.AnimationLoop.bind(this));
     }
 
@@ -141,18 +142,18 @@ export default class Jeux {
 
         
        if(this.inputStates.ArrowRight) {
-            this.joueur.vx = 7;
+            this.joueur.vx = 6;
         } 
         if(this.inputStates.ArrowLeft) {
-            this.joueur.vx = -7;
+            this.joueur.vx = -6;
         } 
 
         if(this.inputStates.ArrowUp) {
-            this.joueur.vy = -7;
+            this.joueur.vy = -6;
         } 
 
         if(this.inputStates.ArrowDown) {
-            this.joueur.vy = 7;
+            this.joueur.vy = 6;
         } 
 
         if (this.joueur.vx !== 0 || this.joueur.vy !== 0) {
@@ -241,8 +242,8 @@ export default class Jeux {
         this.obstacles.forEach(obstacle => {
             if(obstacle.estAtteint(this.joueur)) {
                 this.vies --;
-                this.joueur.x = 40;
-                this.joueur.y = 40;
+                this.joueur.x = 30;
+                this.joueur.y = 30;
 
                 console.log("Obstacle touché, vies restante :", this.vies, "score :",this.score);
             }
@@ -276,8 +277,8 @@ export default class Jeux {
             this.niveau++;
             console.log("niveau :", this.niveau);
             
-            this.joueur.x = 40;
-            this.joueur.y = 40;
+            this.joueur.x = 30;
+            this.joueur.y = 30;
             this.objetNiveau(this.niveau);
         }
     }

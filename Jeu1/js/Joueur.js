@@ -2,7 +2,7 @@ export default class Joueur {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.size = 50;
+        this.size = 41;
         this.speed = 4;
         this.angle = 0;
         this.radius =this.size /2;
