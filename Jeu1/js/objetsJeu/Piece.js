@@ -1,5 +1,5 @@
 import Objet from "./Objet.js";
-import { cercleCollision } from "./collisions.js";
+import { cercleCollision } from "../collisions.js";
 
 
 export default class Piece extends Objet {

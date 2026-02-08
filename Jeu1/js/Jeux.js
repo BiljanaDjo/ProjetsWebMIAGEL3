@@ -1,13 +1,14 @@
-import Joueur from "./Joueur.js";
-import Obstacle from "./Obstacle.js";
-import Piece from "./Piece.js";
-import Sortie from "./Sortie.js";
+import Joueur from "./objetsJeu/Joueur.js";
+import Obstacle from "./objetsJeu/Obstacle.js";
+import Piece from "./objetsJeu/Piece.js";
+import Sortie from "./objetsJeu/Sortie.js";
 import { initListeners } from "./ecouteurs.js";
-import { drawScore } from "./utils.js";
+import { drawScore } from "./utils/utils.js";
 import Menu from "./etats/menu.js";
 import GameOver from "./etats/GameOver.js";
+import BtnDebloqueSortie from "./objetsJeu/BtnDebloqueSortie.js";
 
-
+let debug = 3;
 
 export default class Jeux {
     obstacles = [];
@@ -16,7 +17,7 @@ export default class Jeux {
     constructor(canvas) {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
-        
+
         this.piecesParNiveau = {};
         this.scoreDebutNiveau = 0;
 
@@ -37,14 +38,14 @@ export default class Jeux {
 
         //Pour l'instant j'arrive à le faire fonctionner dans ecouteurs.js mais à long terme faudra mettre la bas
         this.canvas.addEventListener("click", (e) => {
-        const rect = this.canvas.getBoundingClientRect();
-        const mx = (e.clientX - rect.left) * (this.canvas.width / rect.width);
-        const my = (e.clientY - rect.top) * (this.canvas.height / rect.height);
+            const rect = this.canvas.getBoundingClientRect();
+            const mx = (e.clientX - rect.left) * (this.canvas.width / rect.width);
+            const my = (e.clientY - rect.top) * (this.canvas.height / rect.height);
 
-  if (this.etat === "GAME OVER") {
-    this.fin.handleClick(mx, my);
-  }
-});
+            if (this.etat === "GAME OVER") {
+                this.fin.handleClick(mx, my);
+            }
+        });
     }
 
     init() {
@@ -56,6 +57,8 @@ export default class Jeux {
         this.pieces = [];
         initListeners(this.inputStates);
         let niveauActuel = 1; //1
+        //let niveauActuel = debug ?? 1; //sup quand test fini
+        //this.niveau = niveauActuel; // a supp aussi
         this.objetNiveau(niveauActuel);
         this.score = 0;
         this.vies = 5;
@@ -84,7 +87,7 @@ export default class Jeux {
             this.obstacles.push(new Obstacle(249, 17, 249, 33, "black"));
             this.obstacles.push(new Obstacle(414, 166, 124, 33, "black", "horizontal", 2, 348, 580));
             this.obstacles.push(new Obstacle(83, 505, 249, 33, "black"));
-             addPiece(166, 456, 17, 17, "yellow");
+            addPiece(166, 456, 17, 17, "yellow");
             addPiece(124, 133, 17, 17, "yellow");
             addPiece(555, 17, 17, 17, "yellow");
             addPiece(555, 398, 17, 17, "yellow");
@@ -119,9 +122,22 @@ export default class Jeux {
 
         }
 
-        /*if (niveau == 3) {
+        if (niveau == 3) {
+            this.obstacles.push(new Obstacle(0, 80, 300, 30, "black"));
+            this.obstacles.push(new Obstacle(100, 80, 30, 170, "black"));
+            this.obstacles.push(new Obstacle(200, 300, 300, 30, "black"));
+            this.obstacles.push(new Obstacle(0, 410, 300, 30, "black"));
+            this.obsSupp = new Obstacle(0, 250, 130, 30, "black"); 
+            this.obstacles.push(this.obsSupp);
+            addPiece(160, 135, 17, 17, "yellow");
+            addPiece(550, 50, 17, 17, "yellow");
+            addPiece(550, 550, 17, 17, "yellow");
+            addPiece(80, 550, 17, 17, "yellow");
+            addPiece(150, 300, 17, 17, "yellow");
 
-        }*/
+            this.sortie = new Sortie(10, 140, 80, 80);
+            this.btn = new BtnDebloqueSortie(500, 500, 30, 30, "#ffa500");
+        }
     }
 
 
@@ -130,8 +146,10 @@ export default class Jeux {
         this.etat = "MENU D'ACCUEIL";
         //this.etat = "JEU EN COURS";
         this.niveau = 1; //1
+        //this.niveau = debug ?? 1; //a supp
         this.score = 0;
         this.vies = 5;
+        this.objetNiveau(this.niveau);//a supp
         requestAnimationFrame(this.AnimationLoop.bind(this));
     }
 
@@ -160,9 +178,19 @@ export default class Jeux {
         this.collisionObstacle();
         this.collisionPieces();
         this.collisionSortie();
-        if(this.vies <= 0) {
+        if (this.vies <= 0) {
             this.etat = "GAME OVER";
             console.log("jeu terminé");
+        }
+        if (this.niveau == 3) {
+            if (this.btn.actif && this.btn.estAtteint(this.joueur)) {
+                this.btn.desactiver();
+                const index = this.obstacles.indexOf(this.obsSupp);
+                if (index != -1) {
+                    this.obstacles.splice(index, 1);
+                }
+            }
+
         }
     }
 
@@ -197,6 +225,10 @@ export default class Jeux {
     drawObjets() {
         this.joueur.draw(this.ctx);
         this.sortie.draw(this.ctx, this.sortieActive);
+        if (this.niveau == 3) {
+            this.btn.draw(this.ctx);
+        }
+
         this.obstacles.forEach(obj => {
             obj.draw(this.ctx);
         });
@@ -206,7 +238,7 @@ export default class Jeux {
         this.drawScore();
         if (this.showPieceMessage) {
             let elapsed = Date.now() - this.pieceMessageTimer;
-            if (elapsed > 2000) {  
+            if (elapsed > 2000) {
                 this.showPieceMessage = false;
             } else {
                 let rectWidth = 500;
@@ -214,12 +246,12 @@ export default class Jeux {
                 let rectX = (this.canvas.width - rectWidth) / 2;
                 let rectY = (this.canvas.height - rectHeight) / 2;
 
-                
+
                 this.ctx.save();
                 this.ctx.fillStyle = "white";
                 this.ctx.fillRect(rectX, rectY, rectWidth, rectHeight);
 
-                
+
                 this.ctx.fillStyle = "black";
                 this.ctx.font = "20px Arial";
                 this.ctx.textAlign = "center";
@@ -229,7 +261,7 @@ export default class Jeux {
                 this.ctx.restore();
             }
         }
-        
+
     }
 
     drawScore() {
@@ -301,7 +333,7 @@ export default class Jeux {
             this.niveau++;
             console.log("niveau :", this.niveau);
 
-            
+
             this.joueur.x = 30;
             this.joueur.y = 30;
             this.objetNiveau(this.niveau);
@@ -310,11 +342,11 @@ export default class Jeux {
 
     resetPiecesDuNiveau() {
         const cfg = this.piecesParNiveau[this.niveau];
-            if (!cfg) return;
+        if (!cfg) return;
 
         this.pieces = cfg.map(p => new Piece(p.x, p.y, p.w, p.h, p.color));
         this.sortieActive = false;
-        
-  }
+
+    }
 }
 
