@@ -43,10 +43,9 @@ export default class Jeux {
         this.menu = new Menu(this.canvas, this.ctx, this);
         this.fin = new GameOver(this.canvas, this.ctx, this);
         this.JeuTermine = new JeuTermine(this.canvas,this.ctx,this);
-        this.pieceMessageTimer = 0;
 
         //Pour l'instant j'arrive à le faire fonctionner dans ecouteurs.js mais à long terme faudra mettre la bas
-        this.canvas.addEventListener("click", (e) => {
+        /*this.canvas.addEventListener("click", (e) => {
             const rect = this.canvas.getBoundingClientRect();
             const mx = (e.clientX - rect.left) * (this.canvas.width / rect.width);
             const my = (e.clientY - rect.top) * (this.canvas.height / rect.height);
@@ -54,17 +53,16 @@ export default class Jeux {
             if (this.etat === "GAME OVER") {
                 this.fin.handleClick(mx, my);
             }
-        });
+        });*/
     }
 
     init() {
         this.sortieActive = false;
         this.showPieceMessage = true;
-        this.pieceMessageTimer = Date.now();
         this.joueur = new Joueur(30, 30);
         this.obstacles = [];
         this.pieces = [];
-        initListeners(this.inputStates);
+        initListeners(this.inputStates, this.canvas,this);
         let niveauActuel = 1; //1
         //let niveauActuel = debug ?? 1; //sup quand test fini
         //this.niveau = niveauActuel; // a supp aussi
@@ -212,22 +210,6 @@ export default class Jeux {
         requestAnimationFrame(this.AnimationLoop.bind(this));
     }
 
-    /*AnimationLoop() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        if (this.etat === "MENU D'ACCUEIL") {
-            this.menu.draw();
-        } else if (this.etat === "JEU EN COURS") {
-            this.update();
-            this.drawObjets();
-        } else if (this.etat === "GAME OVER") {
-            this.fin.draw();
-        } else if (this.etat=== "JEU TERMINE") {
-            this.JeuTermine.draw();
-        }
-
-
-        requestAnimationFrame(this.AnimationLoop.bind(this));
-    }*/
 
     AnimationLoop() {
         if (this.etat === "MENU D'ACCUEIL") {
@@ -329,32 +311,6 @@ export default class Jeux {
         });
         this.drawScore();
         this.drawTimer();
-        if (this.showPieceMessage) {
-            let elapsed = Date.now() - this.pieceMessageTimer;
-            if (elapsed > 2000) {
-                this.showPieceMessage = false;
-            } else {
-                let rectWidth = 500;
-                let rectHeight = 60;
-                let rectX = (this.canvas.width - rectWidth) / 2;
-                let rectY = (this.canvas.height - rectHeight) / 2;
-
-
-                this.ctx.save();
-                this.ctx.fillStyle = "white";
-                this.ctx.fillRect(rectX, rectY, rectWidth, rectHeight);
-
-
-                this.ctx.fillStyle = "black";
-                this.ctx.font = "20px Bungee";
-                this.ctx.textAlign = "center";
-                this.ctx.textBaseline = "middle";
-                this.ctx.fillText("Toutes les pièces doivent être collectées !", this.canvas.width / 2, this.canvas.height / 2);
-
-                this.ctx.restore();
-            }
-        }
-
     }
 
     drawScore() {
