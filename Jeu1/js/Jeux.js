@@ -45,6 +45,9 @@ export default class Jeux {
         this.fin = new GameOver(this.canvas, this.ctx, this);
         this.JeuTermine = new JeuTermine(this.canvas,this.ctx,this);
         this.transition = new Transition(this.canvas,this.ctx,this);
+        this.messageAffiche = "";
+        this.dureeAffichageMessage = 0;
+
 
         //Pour l'instant j'arrive à le faire fonctionner dans ecouteurs.js mais à long terme faudra mettre la bas
         /*this.canvas.addEventListener("click", (e) => {
@@ -196,6 +199,15 @@ export default class Jeux {
             this.sortie = new Sortie(10, 140, 80, 80);
             this.btn = new BtnDebloqueSortie(500, 500, 30, 30, "#ffa500");
             this.ennemis.push(new Ennemi(300, 200, 30, 30, "red", 250, 2, 5));
+            
+        }
+
+         if (niveau === 1) {
+                this.afficherMessageDebut("Atteignez la ligne d'arrivée !");
+            } else if (niveau === 3) {
+                this.afficherMessageDebut("Les blocs noirs vous tuent !");
+            } else if (niveau === 6) {
+                this.afficherMessageDebut("Activez le bouton orange pour sortir !");       
         }
     }
 
@@ -256,6 +268,8 @@ export default class Jeux {
         });
         if (this.vies <= 0) {
             this.etat = "GAME OVER";
+            this.timerActif = false;
+            this.tempsNiveau = 0
             console.log("jeu terminé");
         }
         if (this.niveau >= 6 && this.btn) {
@@ -315,6 +329,42 @@ export default class Jeux {
         });
         this.drawScore();
         this.drawTimer();
+
+
+        if (this.dureeAffichageMessage > 0) {
+            this.ctx.save();
+    
+    
+        this.ctx.font = "bold 18px Bungee";
+        this.ctx.textAlign = "center";
+        this.ctx.textBaseline = "middle";
+
+    
+        let textMetrics = this.ctx.measureText(this.messageAffiche);
+        let paddingX = 40;
+        let paddingY = 20;
+        let rectW = textMetrics.width + paddingX;
+        let rectH = 40 + paddingY;
+        let rectX = (this.canvas.width - rectW) / 2;
+        let rectY = (this.canvas.height / 2) - (rectH / 2);
+
+        this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+        this.ctx.fillRect(rectX + 5, rectY + 5, rectW, rectH);
+
+        this.ctx.fillStyle = "#333"; // Gris foncé ou la couleur de ton choix
+        this.ctx.strokeStyle = "white"; // Bordure blanche
+        this.ctx.lineWidth = 3;
+        this.ctx.fillRect(rectX, rectY, rectW, rectH);
+        this.ctx.strokeRect(rectX, rectY, rectW, rectH);
+
+        this.ctx.fillStyle = "white";
+        this.ctx.fillText(this.messageAffiche, this.canvas.width / 2, this.canvas.height / 2);
+
+        this.ctx.restore();
+
+        this.dureeAffichageMessage--;
+        }
+
     }
 
     drawScore() {
@@ -395,6 +445,7 @@ export default class Jeux {
 
             } else {
                 this.arreterTimer();
+
                 this.etat = "JEU TERMINE";
                 console.log("jeu terminé");
             }
@@ -408,6 +459,12 @@ export default class Jeux {
         this.pieces = cfg.map(p => new Piece(p.x, p.y, p.w, p.h, p.color));
         this.sortieActive = false;
 
+        if (this.niveau >= 6) {
+            this.btn = new BtnDebloqueSortie(500, 500, 30, 30, "#ffa500");
+                if (!this.obstacles.includes(this.obsSupp)) {
+                    this.obstacles.push(this.obsSupp);
+                }
+        }
     }
 
     getTempsActuel() {
@@ -422,6 +479,11 @@ export default class Jeux {
         this.ctx.fillStyle = "white";
         this.ctx.font = "20px Bungee";
         this.ctx.fillText("Temps : " + this.getTempsActuel() + " s", 20, 30);
+    }
+
+    afficherMessageDebut(texte) {
+        this.messageAffiche = texte;
+        this.dureeAffichageMessage = 180; // Environ 3 secondes (60 frames * 3)
     }
 
 }

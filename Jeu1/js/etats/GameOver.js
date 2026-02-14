@@ -48,6 +48,7 @@ export default class GameOver {
 
     if (inside) {
       this.jeux.init();
+      this.jeux.demarrerTimer();
       this.jeux.etat = "JEU EN COURS";
     }
   }

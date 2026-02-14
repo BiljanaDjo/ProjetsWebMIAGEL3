@@ -1,7 +1,7 @@
 import Objet from "./Objet.js";
 
 export default class Ennemi extends Objet {
-    constructor(x, y, w = 30, h = 30, couleur = "red", zone = 150, vitesse = 2) {
+    constructor(x, y, w = 30, h = 30, couleur = "red", zone = 150, vitesse = 3) {
         super(x, y, w, h, couleur);
 
         this.baseX = x;
