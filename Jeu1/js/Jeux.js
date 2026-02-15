@@ -351,8 +351,8 @@ export default class Jeux {
         this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
         this.ctx.fillRect(rectX + 5, rectY + 5, rectW, rectH);
 
-        this.ctx.fillStyle = "#333"; // Gris foncé ou la couleur de ton choix
-        this.ctx.strokeStyle = "white"; // Bordure blanche
+        this.ctx.fillStyle = "#333";
+        this.ctx.strokeStyle = "white";
         this.ctx.lineWidth = 3;
         this.ctx.fillRect(rectX, rectY, rectW, rectH);
         this.ctx.strokeRect(rectX, rectY, rectW, rectH);
@@ -438,10 +438,6 @@ export default class Jeux {
                 console.log("niveau :", this.niveau);
                 this.demarrerTimer(); // à enlever
                 this.etat = "TRANSITION";
-
-                //this.joueur.x = 30; // a enlever
-                //this.joueur.y = 30; // a enlever
-                //this.objetNiveau(this.niveau); // a enlever
 
             } else {
                 this.arreterTimer();
