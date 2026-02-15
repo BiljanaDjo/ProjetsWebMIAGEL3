@@ -12,8 +12,6 @@ export default class Transition {
         this.btnContinuer = new Bouton(x, y, 260, 70, "Continuer", () => {
             this.jeux.niveau++;
             chargerNiveau(this.jeux, this.jeux.niveau);
-            ///this.jeux.joueur.x = 50;
-            ///this.jeux.joueur.y = 50;
             this.jeux.joueur.reset(50, 50);
             this.jeux.demarrerTimer();
             this.jeux.etat = "JEU EN COURS";

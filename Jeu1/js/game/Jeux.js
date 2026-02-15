@@ -122,8 +122,6 @@ export default class Jeux {
 
             if (ennemi.estAtteint(this.joueur)) {
                 this.vies--;
-                //this.joueur.x = 50;
-                //this.joueur.y = 50;
                 this.joueur.reset(50, 50);
                 ennemi.reset();
                 console.log("Touché par un ennemi, vies :", this.vies);
@@ -235,8 +233,6 @@ export default class Jeux {
                 this.joueur.y -= this.joueur.vy;
                 if (this.niveau >= 3) {
                     this.vies--;
-                    //this.joueur.x = 30;
-                    //this.joueur.y = 30;
                     this.joueur.reset(50, 50);
                     this.score = this.scoreDebutNiveau;
                     this.resetPiecesDuNiveau();
