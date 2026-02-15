@@ -36,7 +36,7 @@ export function chargerNiveau(jeux, niveau) {
         jeux.sortie = new Sortie(450, 10, 100, 100);
     }
 
-    if (niveau == 3) { // si on touche les obstacles on perd une vie et on revient au debut
+    if (niveau == 3) { 
         jeux.obstacles.push(new Obstacle(141, 0, 33, 439, "black"));
         jeux.obstacles.push(new Obstacle(331, 141, 33, 497, "black"));
         addPiece(555, 25, 17, 17, "yellow");
@@ -79,7 +79,6 @@ export function chargerNiveau(jeux, niveau) {
         addPiece(555, 564, 17, 17, "yellow");
         addPiece(41, 414, 17, 17, "yellow");
 
-        // Sortie
         jeux.sortie = new Sortie(0, 481, 99, 99, "white");
     }
 

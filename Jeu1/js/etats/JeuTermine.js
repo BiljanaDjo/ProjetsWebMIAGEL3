@@ -1,8 +1,18 @@
+import Bouton from "../utils/Bouton.js";
+
 export default class JeuTermine {
     constructor(canvas, ctx, jeux) {
         this.canvas = canvas;
         this.ctx = ctx;
         this.jeux = jeux;
+
+        let x = (canvas.width - 260) / 2;
+        let y = 400;
+        this.btnRejouer = new Bouton(x, y, 260, 70, "Rejouer", () => {
+            this.jeux.init();
+            this.jeux.demarrerTimer();
+            this.jeux.etat = "JEU EN COURS";
+        });
     }
 
     draw() {
@@ -34,58 +44,17 @@ export default class JeuTermine {
 
 
         this.ctx.shadowBlur = 0;
-
-
-
         this.ctx.font = "22px Bungee";
         this.ctx.fillStyle = "#dddddd";
-        this.ctx.fillText(
-            `Score final : ${this.jeux.score}`,
-            w / 2,
-            h / 2 -50 //+30
-        );
-
-        this.ctx.fillText(
-            `Vies restantes : ${this.jeux.vies}`,
-            w / 2,
-            h / 2 - 5 //+75
-        );
-
-        ctx.fillText(
-            `Temps du dernier niveau : ${this.jeux.getTempsActuel()} s`,
-            w / 2,
-            h / 2 + 40 //120
-        );
-
-
-        // Bouton Rejouer
-        w = 260;
-        h = 70;
-        let x = (this.canvas.width - w) / 2;
-        let y = 400;
-        this.btnRejouer = { x, y, w, h };
-        this.ctx.shadowBlur = 0;
-        this.ctx.fillStyle = "white";
-        this.ctx.fillRect(x, y, w, h);
-        this.ctx.strokeStyle = "black";
-        this.ctx.lineWidth = 3;
-        this.ctx.strokeRect(x, y, w, h);
-        this.ctx.fillStyle = "black";
-        this.ctx.font = "bold 28px Bungee";
-        this.ctx.textBaseline = "middle";
-        this.ctx.fillText("Rejouer", this.canvas.width / 2, y + h / 2);
+        this.ctx.fillText(`Score final : ${this.jeux.score}`, w / 2, h / 2 - 50);
+        this.ctx.fillText(`Vies restantes : ${this.jeux.vies}`, w / 2, h / 2 - 5);
+        ctx.fillText(`Temps du dernier niveau : ${this.jeux.getTempsActuel()} s`, w / 2, h / 2 + 40);
+        this.btnRejouer.draw(ctx);
         this.ctx.restore();
     }
 
-    handleClick(mx, my) {
-        let b = this.btnRejouer;
-        let inside =
-            mx >= b.x && mx <= b.x + b.w &&
-            my >= b.y && my <= b.y + b.h;
 
-        if (inside) {
-            this.jeux.init();
-            this.jeux.etat = "JEU EN COURS";
-        }
+    handleClick(mx, my) {
+        this.btnRejouer.handleClick(mx, my);
     }
 }

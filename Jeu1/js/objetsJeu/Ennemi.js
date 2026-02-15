@@ -13,15 +13,15 @@ export default class Ennemi extends Objet {
     }
 
     update(joueur) {
-        const dx = joueur.x - this.x;
-        const dy = joueur.y - this.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+        let dx = joueur.x - this.x;
+        let dy = joueur.y - this.y;
+        let dist = Math.sqrt(dx * dx + dy * dy);
 
         this.actif = dist < this.zone;
 
         if (this.actif) {
-            const nx = dx / (dist || 1);
-            const ny = dy / (dist || 1);
+            let nx = dx / (dist || 1);
+            let ny = dy / (dist || 1);
 
             this.x += nx * this.vitesse;
             this.y += ny * this.vitesse;
@@ -32,12 +32,7 @@ export default class Ennemi extends Objet {
     }
 
     estAtteint(joueur) {
-        return (
-            joueur.x + joueur.size / 2 > this.x - this.w / 2 &&
-            joueur.x - joueur.size / 2 < this.x + this.w / 2 &&
-            joueur.y + joueur.size / 2 > this.y - this.h / 2 &&
-            joueur.y - joueur.size / 2 < this.y + this.h / 2
-        );
+        return (joueur.x + joueur.size / 2 > this.x - this.w / 2 &&joueur.x - joueur.size / 2 < this.x + this.w / 2 &&joueur.y + joueur.size / 2 > this.y - this.h / 2 &&joueur.y - joueur.size / 2 < this.y + this.h / 2);
     }
 
     reset() {
@@ -53,8 +48,6 @@ export default class Ennemi extends Objet {
         ctx.rotate(this.angle);
         ctx.fillStyle = this.couleur;
         ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
-        //ctx.fillStyle = "black";
-        //ctx.fillRect(this.w / 4, -4, 8, 8);
         ctx.restore();
     }
 }

@@ -36,25 +36,17 @@ function drawMessage(ctx, canvas, message, duree) {
     let rectH = 40 + paddingY;
     let rectX = (canvas.width - rectW) / 2;
     let rectY = (canvas.height / 2) - (rectH / 2);
-
-    // Ombre
     ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
     ctx.fillRect(rectX + 5, rectY + 5, rectW, rectH);
-
-    // Fond + bordure
     ctx.fillStyle = "#333";
     ctx.strokeStyle = "white";
     ctx.lineWidth = 3;
     ctx.fillRect(rectX, rectY, rectW, rectH);
     ctx.strokeRect(rectX, rectY, rectW, rectH);
-
-    // Texte
     ctx.fillStyle = "white";
     ctx.fillText(message, canvas.width / 2, canvas.height / 2);
-
     ctx.restore();
 
-    // Retourne la nouvelle durée (décrémentée)
     return duree - 1;
 }
 export { drawScore, drawMessage}

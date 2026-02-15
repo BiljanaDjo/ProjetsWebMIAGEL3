@@ -12,7 +12,7 @@ import BtnDebloqueSortie from "../objetsJeu/BtnDebloqueSortie.js";
 import JeuTermine from "../etats/JeuTermine.js";
 import Transition from "../etats/Transition.js";
 
-//let debug = 3;
+
 
 export default class Jeux {
     obstacles = [];
@@ -39,13 +39,12 @@ export default class Jeux {
         };
         this.vies = 5;
         this.score = 0;
-        this.niveau = 1; 
+        this.niveau = 1;
         this.etat = "MENU";
-        //this.etat = "JEU EN COURS";
         this.menu = new Menu(this.canvas, this.ctx, this);
         this.fin = new GameOver(this.canvas, this.ctx, this);
-        this.JeuTermine = new JeuTermine(this.canvas,this.ctx,this);
-        this.transition = new Transition(this.canvas,this.ctx,this);
+        this.JeuTermine = new JeuTermine(this.canvas, this.ctx, this);
+        this.transition = new Transition(this.canvas, this.ctx, this);
         this.messageAffiche = "";
         this.dureeAffichageMessage = 0;
     }
@@ -53,15 +52,15 @@ export default class Jeux {
     init() {
         this.sortieActive = false;
         this.showPieceMessage = true;
-        this.joueur = new Joueur(30, 30);
+        this.joueur = new Joueur(50, 50);
         this.obstacles = [];
         this.pieces = [];
-        initListeners(this.inputStates, this.canvas,this);
-        let niveauActuel = 1; 
-        chargerNiveau(this,niveauActuel); /////
+        initListeners(this.inputStates, this.canvas, this);
+        let niveauActuel = 1;
+        chargerNiveau(this, niveauActuel);
         this.score = 0;
         this.vies = 5;
-        this.niveau = 1; 
+        this.niveau = 1;
         console.log("Jeu initialisé");
     }
 
@@ -78,136 +77,12 @@ export default class Jeux {
         console.log(`Temps du niveau : ${this.tempsNiveau.toFixed(2)} secondes`);
     }
 
-    /*objetNiveau(niveau) {
-        this.obstacles = [];
-        this.pieces = [];
-        this.ennemis = [];
-        this.scoreDebutNiveau = this.score;
-
-        this.piecesParNiveau[niveau] = [];
-        const addPiece = (x, y, w, h, color) => {
-            this.pieces.push(new Piece(x, y, w, h, color));
-            this.piecesParNiveau[niveau].push({ x, y, w, h, color });
-        };
-
-        if (niveau == 1) {
-            console.log("création sortie du niveau 1");
-            this.sortieActive = false;
-            addPiece(166, 456, 17, 17, "yellow");
-            addPiece(124, 133, 17, 17, "yellow");
-            addPiece(555, 17, 17, 17, "yellow");
-            let size = 120;
-            this.sortie = new Sortie(this.canvas.width - size, this.canvas.height - size, size, size);
-        }
-
-        if (niveau == 2) {
-            this.obstacles.push(new Obstacle(280, 0, 30, 400, "black"));
-            addPiece(250, 456, 17, 17, "yellow");
-            addPiece(362, 120, 17, 17, "yellow");
-            addPiece(555, 500, 17, 17, "yellow");
-            this.sortie = new Sortie(450, 10, 100, 100);
-        }
-
-        if (niveau == 3) { // si on touche les obstacles on perd une vie et on revient au debut
-            this.obstacles.push(new Obstacle(141, 0, 33, 439, "black"));
-            this.obstacles.push(new Obstacle(331, 141, 33, 497, "black"));
-            addPiece(555, 25, 17, 17, "yellow");
-            addPiece(280, 524, 17, 17, "yellow");
-            addPiece(104, 331, 17, 17, "yellow");
-            addPiece(439, 179, 17, 17, "yellow");
-            addPiece(555, 434, 17, 17, "yellow");
-            let size = 120;
-            this.sortie = new Sortie(this.canvas.width - size, this.canvas.height - size, size, size);
-        }
-
-        if (niveau == 4) {
-            this.obstacles.push(new Obstacle(141, 0, 33, 439, "black"));
-            this.obstacles.push(new Obstacle(331, 141, 33, 497, "black"));
-            this.obstacles.push(new Obstacle(456, 414, 166, 33, "black"));
-            this.obstacles.push(new Obstacle(249, 17, 249, 33, "black"));
-            this.obstacles.push(new Obstacle(414, 166, 124, 33, "black", "horizontal", 2, 348, 580));
-            addPiece(166, 486, 17, 17, "yellow");
-            addPiece(104, 133, 17, 17, "yellow");
-            addPiece(555, 17, 17, 17, "yellow");
-            addPiece(555, 338, 17, 17, "yellow");
-            addPiece(249, 555, 17, 17, "yellow");
-
-
-            const size = 120;
-            this.sortie = new Sortie(this.canvas.width - size, this.canvas.height - size, size, size);
-        }
-
-        if (niveau == 5) {
-            this.obstacles.push(new Obstacle(83, 0, 25, 248, "black", "vertical", 2, 0, 373));
-            this.obstacles.push(new Obstacle(0, 456, 456, 25, "black"));
-            this.obstacles.push(new Obstacle(83, 248, 290, 25, "black"));
-            this.obstacles.push(new Obstacle(0, 356, 373, 25, "black", "horizontal", 2, 0, 456));
-            this.obstacles.push(new Obstacle(174, 149, 389, 25, "black", 'horizontal', 2, 83, 580));
-
-            addPiece(555, 25, 17, 17, "yellow");
-            addPiece(414, 124, 17, 17, "yellow");
-            addPiece(124, 331, 17, 17, "yellow");
-            addPiece(439, 199, 17, 17, "yellow");
-            addPiece(555, 564, 17, 17, "yellow");
-            addPiece(41, 414, 17, 17, "yellow");
-
-            // Sortie
-            this.sortie = new Sortie(0, 481, 99, 99, "white");
-        }
-
-        if (niveau == 6) {
-            this.obstacles.push(new Obstacle(0, 80, 300, 30, "black"));
-            this.obstacles.push(new Obstacle(100, 80, 30, 170, "black"));
-            this.obstacles.push(new Obstacle(0, 410, 300, 30, "black"));
-            this.obsSupp = new Obstacle(0, 250, 130, 30, "black");
-            this.obstacles.push(this.obsSupp);
-            addPiece(160, 135, 17, 17, "yellow");
-            addPiece(550, 50, 17, 17, "yellow");
-            addPiece(550, 550, 17, 17, "yellow");
-            addPiece(80, 550, 17, 17, "yellow");
-            addPiece(150, 300, 17, 17, "yellow");
-
-            this.sortie = new Sortie(10, 140, 80, 80);
-            this.btn = new BtnDebloqueSortie(500, 500, 30, 30, "#ffa500");
-        }
-        if (niveau == 7) {
-            this.obstacles.push(new Obstacle(0, 80, 300, 30, "black"));
-            this.obstacles.push(new Obstacle(100, 80, 30, 170, "black"));
-            this.obstacles.push(new Obstacle(200, 300, 300, 30, "black"));
-            this.obstacles.push(new Obstacle(0, 410, 300, 30, "black"));
-            this.obsSupp = new Obstacle(0, 250, 130, 30, "black");
-            this.obstacles.push(this.obsSupp);
-            addPiece(160, 135, 17, 17, "yellow");
-            addPiece(550, 50, 17, 17, "yellow");
-            addPiece(550, 550, 17, 17, "yellow");
-            addPiece(80, 550, 17, 17, "yellow");
-            addPiece(150, 300, 17, 17, "yellow");
-
-            this.sortie = new Sortie(10, 140, 80, 80);
-            this.btn = new BtnDebloqueSortie(500, 500, 30, 30, "#ffa500");
-            this.ennemis.push(new Ennemi(300, 200, 30, 30, "red", 250, 2, 5));
-            
-        }
-
-         if (niveau === 1) {
-                this.afficherMessageDebut("Atteignez la ligne d'arrivée !");
-            } else if (niveau === 3) {
-                this.afficherMessageDebut("Les blocs noirs vous tuent !");
-            } else if (niveau === 6) {
-                this.afficherMessageDebut("Activez le bouton orange pour sortir !");       
-        }
-    }*/
-
-
     start() {
         console.log("Jeu demarré");
         this.etat = "MENU D'ACCUEIL";
-        //this.etat = "JEU EN COURS";
-        this.niveau = 1; //1
-        //this.niveau = debug ?? 1; //a supp
+        this.niveau = 1;
         this.score = 0;
         this.vies = 5;
-        //this.objetNiveau(this.niveau);//a supp
         requestAnimationFrame(this.AnimationLoop.bind(this));
     }
 
@@ -222,7 +97,7 @@ export default class Jeux {
             this.drawObjets();
         } else if (this.etat === "GAME OVER") {
             this.fin.draw();
-        } else if (this.etat=== "JEU TERMINE") {
+        } else if (this.etat === "JEU TERMINE") {
             this.JeuTermine.draw();
         } else if (this.etat === "TRANSITION") {
             this.transition.draw();
@@ -247,8 +122,8 @@ export default class Jeux {
 
             if (ennemi.estAtteint(this.joueur)) {
                 this.vies--;
-                this.joueur.x = 30;
-                this.joueur.y = 30;
+                this.joueur.x = 50;
+                this.joueur.y = 50;
                 ennemi.reset();
                 console.log("Touché par un ennemi, vies :", this.vies);
             }
@@ -319,38 +194,7 @@ export default class Jeux {
 
 
         if (this.dureeAffichageMessage > 0) {
-            this.dureeAffichageMessage = drawMessage(this.ctx,this.canvas,this.messageAffiche,this.dureeAffichageMessage);
-            /*this.ctx.save();
-    
-    
-        this.ctx.font = "bold 18px Bungee";
-        this.ctx.textAlign = "center";
-        this.ctx.textBaseline = "middle";
-
-    
-        let textMetrics = this.ctx.measureText(this.messageAffiche);
-        let paddingX = 40;
-        let paddingY = 20;
-        let rectW = textMetrics.width + paddingX;
-        let rectH = 40 + paddingY;
-        let rectX = (this.canvas.width - rectW) / 2;
-        let rectY = (this.canvas.height / 2) - (rectH / 2);
-
-        this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
-        this.ctx.fillRect(rectX + 5, rectY + 5, rectW, rectH);
-
-        this.ctx.fillStyle = "#333"; // Gris foncé ou la couleur de ton choix
-        this.ctx.strokeStyle = "white"; // Bordure blanche
-        this.ctx.lineWidth = 3;
-        this.ctx.fillRect(rectX, rectY, rectW, rectH);
-        this.ctx.strokeRect(rectX, rectY, rectW, rectH);
-
-        this.ctx.fillStyle = "white";
-        this.ctx.fillText(this.messageAffiche, this.canvas.width / 2, this.canvas.height / 2);
-
-        this.ctx.restore();
-
-        this.dureeAffichageMessage--;*/
+            this.dureeAffichageMessage = drawMessage(this.ctx, this.canvas, this.messageAffiche, this.dureeAffichageMessage);
         }
 
     }
@@ -394,8 +238,11 @@ export default class Jeux {
                     this.joueur.y = 30;
                     this.score = this.scoreDebutNiveau;
                     this.resetPiecesDuNiveau();
+                    if (this.niveau >= 7 && this.ennemis[0]) {
+                        this.ennemis[0].reset();
+                    }
                     console.log("Obstacle touché, vies restante :", this.vies, "score :", this.score);
-                } 
+                }
             }
         });
     }
@@ -404,7 +251,6 @@ export default class Jeux {
         this.pieces = this.pieces.filter(piece => {
             if (piece.estAtteint(this.joueur)) {
                 this.score += 10;
-                //Re mettre les pieces aussi 
                 console.log("Piece attrapée, score :", this.score);
                 return false;
             }
@@ -417,16 +263,8 @@ export default class Jeux {
             if (this.niveau < 7) {
                 this.arreterTimer();
                 console.log("Sortie atteinte");
-                ///this.niveau++;
-                ///console.log("niveau :", this.niveau);
-                ///this.demarrerTimer(); // à enlever
-                ///chargerNiveau(this, this.niveau);
                 this.etat = "TRANSITION";
                 console.log("niveau :", this.niveau);
-                //this.joueur.x = 30; // a enlever
-                //this.joueur.y = 30; // a enlever
-                //this.objetNiveau(this.niveau); // a enlever
-
             } else {
                 this.arreterTimer();
 
@@ -445,9 +283,9 @@ export default class Jeux {
 
         if (this.niveau >= 6) {
             this.btn = new BtnDebloqueSortie(500, 500, 30, 30, "#ffa500");
-                if (!this.obstacles.includes(this.obsSupp)) {
-                    this.obstacles.push(this.obsSupp);
-                }
+            if (!this.obstacles.includes(this.obsSupp)) {
+                this.obstacles.push(this.obsSupp);
+            }
         }
     }
 
@@ -467,7 +305,7 @@ export default class Jeux {
 
     afficherMessageDebut(texte) {
         this.messageAffiche = texte;
-        this.dureeAffichageMessage = 180; // Environ 3 secondes (60 frames * 3)
+        this.dureeAffichageMessage = 180;
     }
 
 }
