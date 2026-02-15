@@ -5,25 +5,33 @@ export default class Joueur {
         this.size = 41;
         this.speed = 4;
         this.angle = 0;
-        this.radius =this.size /2;
+        this.radius = this.size / 2;
     }
 
     draw(ctx) {
         ctx.save();
-        ctx.translate(this.x,this.y);
+        ctx.translate(this.x, this.y);
         ctx.rotate(this.angle);
         ctx.fillStyle = "#b968d3";
         ctx.beginPath();
-        ctx.arc(0, 0, this.size/2, 0,Math.PI*2);
+        ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
         ctx.fill();
 
         ctx.beginPath();
-        ctx.moveTo(0,0);
-        ctx.lineTo(this.size /2,0);
-        ctx.strokeStyle ="black";
+        ctx.moveTo(0, 0);
+        ctx.lineTo(this.size / 2, 0);
+        ctx.strokeStyle = "black";
         ctx.stroke();
         ctx.restore();
-        
+
+    }
+
+    reset(x, y) {
+        this.x = x;
+        this.y = y;
+        this.vx = 0;
+        this.vy = 0;
+        this.angle = 0;
     }
 
     move() {

@@ -1,6 +1,5 @@
-// Sortie.js
 const imgSortie = new Image();
-imgSortie.src = "./assets/ligne_arrive.png"; // <- ton PNG
+imgSortie.src = "./assets/ligne_arrive.png"; 
 let imgLoaded = false;
 
 imgSortie.onload = () => { imgLoaded = true; };
@@ -10,50 +9,42 @@ export default class Sortie {
   constructor(x, y, width, height) {
     this.x = x;
     this.y = y;
-
-    // compat si ailleurs tu utilises w/h ou width/height
     this.width = width; this.height = height;
     this.w = width; this.h = height;
   }
 
+
   draw(ctx, active = true) {
-    const w = this.width ?? this.w;
-    const h = this.height ?? this.h;
-
+    let w = (this.width !== undefined) ? this.width : this.w;
+    let h = (this.height !== undefined) ? this.height : this.h;
     ctx.save();
-    ctx.globalAlpha = 1;
-
+    ctx.translate(this.x + w / 2, this.y + h / 2);
 
     if (imgLoaded) {
-      const scale = Math.max(w / imgSortie.width, h / imgSortie.height);
-      const dw = imgSortie.width * scale;
-      const dh = imgSortie.height * scale;
-      const dx = this.x + (w - dw) / 2;
-      const dy = this.y + (h - dh) / 2;
-
-      ctx.drawImage(imgSortie, dx, dy, dw, dh);
+      ctx.drawImage(imgSortie, -w / 2, -h / 2, w, h);
     } else {
       ctx.strokeStyle = "white";
       ctx.lineWidth = 3;
-      ctx.strokeRect(this.x, this.y, w, h);
+      ctx.strokeRect(-w / 2, -h / 2, w, h);
     }
 
     ctx.restore();
   }
 
 
+
   estAtteint(joueur) {
-    const w = this.width ?? this.w;
-    const h = this.height ?? this.h;
+    let w = this.width ?? this.w;
+    let h = this.height ?? this.h;
 
-    const cx = joueur.x, cy = joueur.y;
-    const r = joueur.size / 2;
+    let cx = joueur.x, cy = joueur.y;
+    let r = joueur.size / 2;
 
-    const closestX = Math.max(this.x, Math.min(cx, this.x + w));
-    const closestY = Math.max(this.y, Math.min(cy, this.y + h));
+    let closestX = Math.max(this.x, Math.min(cx, this.x + w));
+    let closestY = Math.max(this.y, Math.min(cy, this.y + h));
 
-    const dx = cx - closestX;
-    const dy = cy - closestY;
+    let dx = cx - closestX;
+    let dy = cy - closestY;
 
     return (dx * dx + dy * dy) <= (r * r);
   }

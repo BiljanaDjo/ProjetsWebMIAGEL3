@@ -1,4 +1,4 @@
-import Jeux from "./Jeux.js";
+import Jeux from "./game/Jeux.js";
 
 let canvas = document.querySelector("#Canvas");
 let game = new Jeux(canvas);

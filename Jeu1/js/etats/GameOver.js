@@ -1,10 +1,19 @@
+import Bouton from "../utils/Bouton.js";
+
 export default class GameOver {
   constructor(canvas, ctx, jeux) {
     this.canvas = canvas;
     this.ctx = ctx;
     this.jeux = jeux;
 
-    this.btnRejouer = { x: 0, y: 0, w: 0, h: 0 };
+
+    let x = (canvas.width - 260) / 2;
+    let y = 260;
+    this.btnRejouer = new Bouton(x, y, 260, 70, "Rejouer", () => {
+      this.jeux.init();
+      this.jeux.demarrerTimer();
+      this.jeux.etat = "JEU EN COURS";
+    });
   }
 
   draw() {
@@ -15,41 +24,19 @@ export default class GameOver {
     this.ctx.fillStyle = grad;
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.fillStyle = "white";
-    this.ctx.font = "bold 50px 'Bungee', sans-serif";
+    this.ctx.font = "bold 60px 'Bungee', sans-serif";
     this.ctx.textAlign = "center";
     this.ctx.shadowColor = "rgba(0,0,0,0.5)";
-    this.ctx.shadowBlur = 10;
+    this.ctx.shadowBlur = 25;
     this.ctx.fillText("Game Over", this.canvas.width / 2, 150);
 
-    // Bouton Rejouer
-    const w = 260;
-    const h = 70;
-    const x = (this.canvas.width - w) / 2;
-    const y = 260;
-    this.btnRejouer = { x, y, w, h };
     this.ctx.shadowBlur = 0;
-    this.ctx.fillStyle = "white";
-    this.ctx.fillRect(x, y, w, h);
-    this.ctx.strokeStyle = "black";
-    this.ctx.lineWidth = 3;
-    this.ctx.strokeRect(x, y, w, h);
-    this.ctx.fillStyle = "black";
-    this.ctx.font = "bold 28px Bungee";
-    this.ctx.textBaseline = "middle";
-    this.ctx.fillText("Rejouer", this.canvas.width / 2, y + h / 2);
+    this.btnRejouer.draw(this.ctx);
     this.ctx.restore();
   }
 
-  handleClick(mx, my) {
-    const b = this.btnRejouer;
-    const inside =
-      mx >= b.x && mx <= b.x + b.w &&
-      my >= b.y && my <= b.y + b.h;
 
-    if (inside) {
-      this.jeux.init();
-      this.jeux.demarrerTimer();
-      this.jeux.etat = "JEU EN COURS";
-    }
+  handleClick(mx, my) {
+    this.btnRejouer.handleClick(mx, my);
   }
 }

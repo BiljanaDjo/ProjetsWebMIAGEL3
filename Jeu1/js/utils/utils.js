@@ -20,4 +20,33 @@ function drawScore(ctx,canvas,score,niveau,vies) {
     ctx.restore();
 }
 
-export { drawScore}
+function drawMessage(ctx, canvas, message, duree) {
+    if (!message || duree <= 0) return 0;
+
+    ctx.save();
+
+    ctx.font = "bold 18px Bungee";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    let textMetrics = ctx.measureText(message);
+    let paddingX = 40;
+    let paddingY = 20;
+    let rectW = textMetrics.width + paddingX;
+    let rectH = 40 + paddingY;
+    let rectX = (canvas.width - rectW) / 2;
+    let rectY = (canvas.height / 2) - (rectH / 2);
+    ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+    ctx.fillRect(rectX + 5, rectY + 5, rectW, rectH);
+    ctx.fillStyle = "#333";
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 3;
+    ctx.fillRect(rectX, rectY, rectW, rectH);
+    ctx.strokeRect(rectX, rectY, rectW, rectH);
+    ctx.fillStyle = "white";
+    ctx.fillText(message, canvas.width / 2, canvas.height / 2);
+    ctx.restore();
+
+    return duree - 1;
+}
+export { drawScore, drawMessage}
