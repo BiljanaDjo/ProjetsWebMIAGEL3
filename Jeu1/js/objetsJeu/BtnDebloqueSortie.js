@@ -1,5 +1,5 @@
 import Objet from "./Objet.js";
-import { cercleRectangleCentre } from "../collisions.js";
+import { cercleRectangleCentre } from "../game/collisions.js";
 
 export default class BtnDebloqueSortie extends Objet {
     constructor(x, y, w, h, couleur) {

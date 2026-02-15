@@ -1,5 +1,5 @@
 import Objet from "./Objet.js";
-import { cercleRectangleCentre } from "../collisions.js";
+import { cercleRectangleCentre } from "../game/collisions.js";
 
 export default class Obstacle extends Objet {
     constructor(x,y,w,h,couleur,mouvement = null,vitesse = 0,min = null,max = null) {

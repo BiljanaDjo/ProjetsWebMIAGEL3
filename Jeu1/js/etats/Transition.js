@@ -1,3 +1,5 @@
+import { chargerNiveau } from "../game/niveaux.js"; // ./ parce que Transition.js est dans le même dossier que niveaux.js
+
 export default class Transition {
     constructor(canvas, ctx, jeux) {
         this.canvas = canvas;
@@ -17,7 +19,7 @@ export default class Transition {
 
         this.ctx.font = "40px Bungee";
         this.ctx.fillText(
-            `Niveau ${this.jeux.niveau - 1} terminé !`,
+            `Niveau ${this.jeux.niveau } terminé !`,
             this.canvas.width / 2,
             150
         );
@@ -30,7 +32,7 @@ export default class Transition {
         );
 
         this.ctx.fillText(
-            `Temps : ${this.jeux.tempsNiveau.toFixed(1)} s`,
+            `Temps : ${this.jeux.tempsNiveau.toFixed(1)} secondes`,
             this.canvas.width / 2,
             300
         );
@@ -75,7 +77,8 @@ export default class Transition {
             my >= b.y && my <= b.y + b.h;
 
         if (inside) {
-            this.jeux.objetNiveau(this.jeux.niveau);
+            this.jeux.niveau++;
+            chargerNiveau(this.jeux, this.jeux.niveau);
             this.jeux.joueur.x = 30;
             this.jeux.joueur.y = 30;
             this.jeux.demarrerTimer();
